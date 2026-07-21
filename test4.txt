@@ -1,0 +1,31 @@
+안녕하세요.
+김동건 부장님, 
+문형권 대리님, 
+위세아이텍 김기언입니다.
+
+WAS(Tomcat) 취약점에 대한 조치를 요청 드리며,
+7월 31일까지 조치 가능한지 확인 부탁드립니다.
+(또는 조치 가능한 날짜를 알려주십시오)
+
+1. docBase 설정
+    - 권고사항: "server.xml 파일 내 docBase 설정 권고"
+    - Tomcat server.xml 
+    - docBase를 설정에 대한 검토 요청을 드립니다.
+    - docBase 경로 설정을 요청 드립니다.
+
+2. LDAP 설정
+    - 권고사항: "비밀번호 알고리즘 설정 권고"
+    - Tomcat server.xml 
+    - 제품 내에서 LDAP을 사용하고 있는지 확인 요청 드립니다.
+    - LDAP 사용 여부에 따른 조치를 요청 드립니다.
+
+3. 업로드 경로 권한 설정
+    - 권고사항1: "- BizMeta : 사용자 접근권한 제거 권고"
+    - 권고사항2: "- Meta4 : 소유자 그룹 설정 권고"
+    - BizMeta, Meta4 업로드 경로의 권한을 확인 요청 드립니다.
+    - BizMeta "drwxrwxr-x 5 datacat datacat 4096 Dec  5  2022 upload" 에서 Group과 Other의 권한 설정 요청
+    - Meta4 "drwxr-x--- 2 datacat    1006 4096 Aug 26  2022 bbsfiles" 에서 적절한 Group 지정 요청
+
+감사합니다.
+
+
