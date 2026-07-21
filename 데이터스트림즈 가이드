@@ -1,0 +1,117 @@
+DG 제품군 인프라 구성 및 서버 권장 사양 가이드
+1. 목적
+본 문서는 DataStreams DG 제품군(IRUDA, MetaStream, MetaStream for BizData, QualityStream, Q-TRACK)의
+설치 및 운영을 위한 인프라 구성 기준과 서버 권장 사양을 제공합니다.
+제시된 권장 사양은 일반적인 운영 환경을 기준으로 산정하였으며, 실제 구축 시에는 데이터 규모,
+사용자 수 및 운영 정책을 고려하여 조정할 수 있습니다.
+Q-TRACK은 제품 특성상 독립적인 AP/WAS 및 DB 서버 구성을 권장하며, 별도의 권장 사양을 함께
+제공합니다.
+2. 인프라 구성 기준
+구성 항목 권장 사항
+AP Server 이중화 및 분리 구성 권장
+DB Server 단일 또는 이중화
+검색 엔진 단일 또는 Cluster 구성 가능
+WAS 제품별 개별 Instance 구성 권장
+DB 제품별 Schema 분리
+Storage 이중화 환경에서는 공유 Storage 권장
+※ 개발 및 소규모 환경에서는 단일 서버 구성이 가능하며, 일반 운영 환경에서는 AP, DB 및 검색
+엔진의 분리 구성을 권장합니다.
+※ 여러 제품을 동일 AP Server에서 운영하는 경우에도 제품별 WAS Instance를 분리하여 운영하는
+것을 권장합니다.
+3. 서버 권장 사양
+아래 권장 사양은 일반적인 운영 환경을 기준으로 산정하였습니다. AP Server는 이중화 구성을
+권장하며, DB Server 및 검색 엔진은 고객사 운영 정책에 따라 단일 또는 이중화(Cluster) 구성을
+선택하여 적용할 수 있습니다.
+3.1 DG 제품군 (IRUDA, MetaStream, MetaStream for BizData, QualityStream)
+AP Server
+항목 최소 구성 권장 구성 (이중화 기준)
+CPU 8 Core 16 Core
+Memory 64 GB 128 GB
+Storage OS 130GB + Data 500GB OS 130GB + Data 870GB + 공유영역 1TB
+※ AP Server의 권장 Memory는 제품별 JVM Heap Memory, 운영체제(OS), JVM Native Memory 및 운영
+여유 메모리를 고려하여 산정하였습니다. 본 권장 사양은 4개 제품을 동일 AP Server에서 제품별 개별
+WAS Instance로 운영하는 환경을 기준으로 산정하였습니다.
+1 / 4
+DB Server
+항목 최소 구성 권장 구성
+CPU 8 Core 16 Core
+Memory 64 GB 256 GB
+Storage OS 130GB + Data 500GB OS 130GB + Data 1TB
+※ DB Server 권장 사양은 일반적인 운영 환경을 기준으로 산정하였으며, 데이터 규모 및 DBMS 특성에
+따라 Memory 및 Storage 증설을 권장합니다.
+검색 엔진 Server
+항목 최소 구성 권장 구성
+CPU 8 Core 16 Core
+Memory 64 GB 128 GB
+Storage OS 130GB + Data 500GB OS 130GB + Data 1.8TB
+※ 검색 엔진 권장 사양은 단일 구성을 기준으로 산정하였으며, Cluster 구성 시 동일 사양의 서버를
+추가하여 구성하는 것을 권장합니다.
+3.2 Q-TRACK
+Q-TRACK은 제품 특성을 고려하여 DG 제품군과 분리된 AP/WAS 및 DB 서버 구성을 권장합니다.
+AP Server
+항목 최소 구성 권장 구성(이중화 기준)
+CPU 8 Core 16 Core
+Memory 64 GB 128 GB
+Storage OS 130GB + Data 870GB + 공유영역 2TB
+DB Server
+항목 최소 구성 권장 구성
+CPU 8 Core 16 Core
+Memory 64 GB 256 GB
+Storage OS 130GB + Data 1TB
+※ 데이터량 증가에 따라 Memory 및 Storage 증설을 권장합니다.
+2 / 4
+4. WAS(JVM) Memory 권장 설정
+운영 환경에서는 제품 특성을 고려하여 다음과 같이 JVM Heap Memory를 설정하는 것을 권장합니다.
+제품 최소 권장
+IRUDA 4 GB 8 GB
+MetaStream 4 GB 32 GB
+MetaStream for BizData 4 GB 8 GB
+QualityStream 16 GB 32 GB
+Q-TRACK 16GB 64GB
+※ 표의 최소 구성은 개발 서버 또는 소규모 운영 환경을 기준으로 하며, 권장 구성은 일반적인 운영
+환경에서 안정적인 서비스를 위한 권장 기준입니다. MetaStream은 동시 사용자 증가, 메타데이터
+조회, Excel 업로드/다운로드 작업을 고려하여 32GB를 권장합니다. Q-TRACK은 데이터 흐름 정보를
+메모리에 적재하여 분석하는 특성상 64GB를 권장하며, 대규모 운영 환경에서는 128GB까지 설정할
+수 있습니다.
+5. DB Connection Pool 권장 설정
+운영 환경에서는 제품별 WAS Instance 기준으로 Connection Pool을 설정하는 것을 권장합니다.
+제품 권장 Max Pool Size 주요 특성
+IRUDA 10~50 전체 사용자 진입 포털 및 공통 서비스
+MetaStream 20~200 메타데이터 조회, 승인, 엑셀 처리
+MetaStream for BizData 10~50 초기 화면 메타데이터 다중 조회
+QualityStream 10~50 품질 분석, 프로파일링, 스케줄러 수행
+Q-TRACK 10~50 데이터 흐름 분석 및 배치 처리
+※ 연계 DB는 제품 간 조회 및 연계 기능에 사용하는 Connection Pool로, 일반적인 운영 환경에서는
+DB별 Max Pool Size를 5~10으로 설정하는 것을 권장합니다.
+비고
+• 권장 Max Pool Size는 일반적인 운영 환경을 기준으로 제시한 초기 권장 범위이며, 실제 구축
+시에는 동시 사용자 수, DBMS의 max_connections, 배치 및 스케줄러 수행 여부 등을 고려하여
+조정합니다.
+• 여러 제품을 동일 DBMS에서 운영하는 경우 각 제품의 Max Pool Size 합계가 DBMS의 허용
+Connection 수를 초과하지 않도록 설정하는 것을 권장합니다.
+3 / 4
+6. 서버 자원 증설 검토 기준
+다음과 같은 환경에서는 권장 사양 이상의 서버 자원 구성을 검토하는 것을 권장합니다.
+구분 검토 대상
+CPU 동시 사용자 증가, 배치 작업 증가
+Memory 대량 Excel 업로드/다운로드, 조회 및 검색 증가, Heap Memory 사용률 증가
+또는 장시간 Full GC 발생
+Storage 데이터 증가, 로그, 업로드 파일, 검색 데이터 증가
+Connection Pool Connection 부족, Connection Pool 대기(Connection Wait) 증가
+7. 운영 환경별 적용 기준
+운영 환경 권장 구성
+개발 단일 서버
+테스트 단일 또는 분리 서버
+운영 분리 서버
+대규모 운영 분리 서버 + 이중화
+8. 참고 사항
+• 본 문서의 권장 사양은 일반적인 운영 환경을 기준으로 작성되었습니다.
+• 실제 구축 시에는 데이터 규모, 사용자 수 및 운영 정책을 고려하여 서버 사양을 조정할 수
+있습니다.
+• 운영 중 CPU, Memory 및 Storage 사용률을 지속적으로 모니터링하고, 자원 사용량 증가 시
+서버 증설을 검토하는 것을 권장합니다.
+• 여러 제품을 동일 서버에서 운영하는 경우 CPU, 서버 Memory, JVM Heap Memory 및
+Connection Pool을 종합적으로 고려하여 설정하는 것을 권장합니다.
+• 검색 엔진(OpenSearch/Elasticsearch)을 사용하는 경우 검색 데이터 규모 및 사용량에 따라
+Cluster 구성을 검토할 수 있습니다.
+4 / 4
